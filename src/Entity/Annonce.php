@@ -53,22 +53,15 @@ class Annonce
      * @ORM\Column(type="date")
      */
     private $creation;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Categorie::class, mappedBy="annonce", orphanRemoval=true)
-     */
-    private $categorie;
-
     /**
      * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="annonces")
      */
     private $auteur;
-
-    public function __construct()
-    {
-        $this->categorie = new ArrayCollection();
-    }
-
+    /**
+     * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="annonce")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $categorie;
     public function getId(): ?int
     {
         return $this->id;
@@ -158,37 +151,6 @@ class Annonce
         return $this;
     }
 
-    /**
-     * @return Collection|Categorie[]
-     */
-    public function getCategorie(): Collection
-    {
-        return $this->categorie;
-    }
-
-    public function addCategorie(Categorie $categorie): self
-    {
-        if (!$this->categorie->contains($categorie)) {
-            $this->categorie[] = $categorie;
-            $categorie->setAnnonce($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategorie(Categorie $categorie): self
-    {
-        if ($this->categorie->contains($categorie)) {
-            $this->categorie->removeElement($categorie);
-            // set the owning side to null (unless already changed)
-            if ($categorie->getAnnonce() === $this) {
-                $categorie->setAnnonce(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAuteur(): ?Utilisateur
     {
         return $this->auteur;
@@ -197,6 +159,18 @@ class Annonce
     public function setAuteur(?Utilisateur $auteur): self
     {
         $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): self
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

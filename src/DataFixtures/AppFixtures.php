@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -27,6 +28,7 @@ class AppFixtures extends Fixture
         for ($i = 1; $i <= 10; $i++) {
             $utilisateur = new Utilisateur;
 
+
             $utilisateur
                 ->setEmail('user' . $i . '@mail.fr')
                 ->setPassword($this->passwordEncoder->encodePassword($utilisateur, 'user' . $i))
@@ -35,6 +37,9 @@ class AppFixtures extends Fixture
                 ->setNom($faker->lastName)
                 ->setTelephone($faker->phoneNumber)
                 ->setInscription($faker->dateTime);
+            //   ->setCategorie($categorie);
+
+
 
             $manager->persist($utilisateur);
         }

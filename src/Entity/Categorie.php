@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategorieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,10 +25,14 @@ class Categorie
     private $nom;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Annonce::class, inversedBy="categorie")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Annonce::class, mappedBy="categorie", orphanRemoval=true)
      */
     private $annonce;
+
+    public function __construct()
+    {
+        $this->annonce = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -45,14 +51,33 @@ class Categorie
         return $this;
     }
 
-    public function getAnnonce(): ?Annonce
+    /**
+     * @return Collection|Annonce[]
+     */
+    public function getAnnonce(): Collection
     {
         return $this->annonce;
     }
 
-    public function setAnnonce(?Annonce $annonce): self
+    public function addAnnonce(Annonce $annonce): self
     {
-        $this->annonce = $annonce;
+        if (!$this->annonce->contains($annonce)) {
+            $this->annonce[] = $annonce;
+            $annonce->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnnonce(Annonce $annonce): self
+    {
+        if ($this->annonce->contains($annonce)) {
+            $this->annonce->removeElement($annonce);
+            // set the owning side to null (unless already changed)
+            if ($annonce->getCategorie() === $this) {
+                $annonce->setCategorie(null);
+            }
+        }
 
         return $this;
     }

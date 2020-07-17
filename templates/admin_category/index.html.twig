@@ -33,17 +33,17 @@
 							{{  category.nom |slice(0,15)}}
 						</td>
 						<td>
-							{{  category.annonce}}
+							{{  category.annonce.}}
 						</td>
 
 						<td>
 							{#
-																												<div>
-																													<a href="{{ path('edit_category',{id:category.id}) }}" class="button is-success">Modifier</a>
-																													<a href="{{ path('delete_category',{id:category.id}) }}" class="button is-danger">Supprimer</a>
-																												</div>
-																												
-																												                        #}
+																																			<div>
+																																				<a href="{{ path('edit_category',{id:category.id}) }}" class="button is-success">Modifier</a>
+																																				<a href="{{ path('delete_category',{id:category.id}) }}" class="button is-danger">Supprimer</a>
+																																			</div>
+																																			
+																																			                        #}
 
 						</td>
 					</tr>
